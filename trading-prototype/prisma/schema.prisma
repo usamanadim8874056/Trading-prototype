@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  usdCash   Int        @default(10000)
+  role      String     @default("USER")
+  createdAt DateTime   @default(now())
+  trades    Trade[]
+  walletTxs WalletTx[]
+}
+
+model Symbol {
+  id     String  @id @default(cuid())
+  ticker String  @unique
+  name   String
+  last   Int
+  trades Trade[]
+}
+
+model Trade {
+  id         String   @id @default(cuid())
+  userId     String
+  symbolId   String
+  direction  String
+  stakeUsd   Int
+  startPrice Int
+  endPrice   Int?
+  startAt    DateTime @default(now())
+  endAt      DateTime
+  status     String   @default("OPEN")
+  pnlUsd     Int      @default(0)
+
+  user   User   @relation(fields: [userId], references: [id])
+  symbol Symbol @relation(fields: [symbolId], references: [id])
+}
+
+model WalletTx {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  amountUsd Int
+  status    String   @default("SUCCESS")
+  note      String?
+  createdAt DateTime @default(now())
+
+  method        String?
+  bankName      String?
+  accountName   String?
+  accountNumber String?
+  cardNumber    String?
+  cardLast4     String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+}

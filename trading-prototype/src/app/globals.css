@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* Binance Dark Theme Variables */
+:root {
+  --bg: #0b0e11;
+  --card: #161a1e;
+  --border: #2b3139;
+
+  --text: #eaecef;
+  --muted: #848e9c;
+
+  --yellow: #f0b90b;
+  --green: #0ecb81;
+  --red: #f6465d;
+
+  /* Tailwind template mapping (important) */
+  --background: var(--bg);
+  --foreground: var(--text);
+}
+
+/* Force whole app */
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
